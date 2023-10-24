@@ -9,7 +9,7 @@ type Props = {
 
 const Links = (props: Props): JSX.Element => {
   const pathname = usePathname();
-  const links = ['/about', '/services', '/contacts', ''];
+  const links = ['/about', '/services', '/contacts', '/dashboard', ''];
 
   const handleToggle = () => {
     if (!props.isMobile) return;
@@ -17,7 +17,7 @@ const Links = (props: Props): JSX.Element => {
   };
 
   const linkMap = links.map((link) => {
-    const activeLink = link === pathname;
+    const activeLink = link === pathname || pathname.match(link);
     return (
       <li key={link}>
         <Link

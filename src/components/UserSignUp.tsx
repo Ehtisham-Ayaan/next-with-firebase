@@ -1,10 +1,10 @@
 'use client';
 
 import React, { FormEvent, useEffect, useState } from 'react';
-import ButtonSecondary from '@/ui/ButtonSecondary';
-import Input from '@/ui/Input';
+import ButtonSecondary from '@/components/ui/ButtonSecondary';
+import Input from '@/components/ui/Input';
 import { addUserToFirebase } from '@/lib/firebase/userHandler';
-import ImagePicker from '@/ui/ImagePicker';
+import ImagePicker from '@/components/ui/ImagePicker';
 
 type Props = {};
 

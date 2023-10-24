@@ -2,8 +2,8 @@ import React from 'react';
 
 type Props = {
   name: string;
-  label: string;
-  for: string;
+  label?: string;
+  for?: string;
   type: string;
   placeholder: string;
   value: string;

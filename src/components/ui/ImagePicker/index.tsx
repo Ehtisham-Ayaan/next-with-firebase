@@ -1,15 +1,15 @@
 'use client';
 
-import Image from 'next/image';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 type Props = {
+  imgUrl?: string;
   onFileChange: (event: any) => void;
 };
 
 const ImagePicker = (props: Props) => {
-  const [imgSrc, setImgSrc] = useState('');
-
+  const [imgSrc, setImgSrc] = useState(props.imgUrl);
   const fileChange = (event: any) => {
     const file = event.target.files[0];
 
@@ -26,7 +26,7 @@ const ImagePicker = (props: Props) => {
     <div className='center group mx-auto'>
       <div className='h-36 w-36 rounded-full text-center shadow-lg'>
         <div className='h-36 w-36 rounded-full'>
-          <img
+          <Image
             className='mx-auto max-h-full max-w-full rounded-full object-contain object-center'
             src={
               imgSrc
@@ -34,6 +34,8 @@ const ImagePicker = (props: Props) => {
                 : 'https://www.kindpng.com/picc/m/421-4212275_transparent-default-avatar-png-avatar-img-png-download.png'
             }
             alt='Avatar Upload'
+            width='150'
+            height='150'
           />
         </div>
         <label className='-mt-16 hidden cursor-pointer group-hover:block'>

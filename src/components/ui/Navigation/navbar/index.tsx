@@ -7,7 +7,7 @@ import LinkMap from '../links';
 const Navbar = ({ toggle }: { toggle: () => void }) => {
   return (
     <>
-      <div className='sticky top-0 h-20 w-full bg-emerald-800'>
+      <div className='top-0 h-20 w-full bg-emerald-800'>
         <div className='container mx-auto h-full px-4'>
           <div className='flex h-full items-center justify-between'>
             <Logo />

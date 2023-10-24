@@ -2,8 +2,8 @@
 
 import React, { FormEvent, useState } from 'react';
 import Link from 'next/link';
-import Input from '@/ui/Input';
-import ButtonSecondary from '@/ui/ButtonSecondary';
+import Input from '@/components/ui/Input';
+import ButtonSecondary from '@/components/ui/ButtonSecondary';
 import { signInUserToFirebase } from '@/lib/firebase/userHandler';
 
 type Props = {};

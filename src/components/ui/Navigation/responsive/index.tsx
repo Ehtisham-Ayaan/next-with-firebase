@@ -16,7 +16,7 @@ const Responsive = ({
           top: ` ${isOpen ? '0' : '-100%'}`,
         }}
       >
-        <button className='absolute right-0 p-5 ' onClick={toggle}>
+        <button className='absolute right-0 p-5' onClick={toggle}>
           {/* Close icon */}
           <svg
             xmlns='http://www.w3.org/2000/svg'

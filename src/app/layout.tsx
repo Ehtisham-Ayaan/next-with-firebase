@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Poppins, Roboto } from 'next/font/google';
-import Navigation from '@/ui/Navigation';
+import Navigation from '@/components/ui/Navigation';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
