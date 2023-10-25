@@ -31,7 +31,7 @@ const Records = ({
       <table className='text-md mb-4 hidden w-auto rounded bg-white shadow-md xl:block'>
         <tbody>
           <tr className='border-b '>
-            <th className=' p-3 px-5 text-left'>
+            <th className='w-[18%] p-3 px-5 text-left'>
               First Name{' '}
               <button
                 className={`${sortByName && 'rotate-180'}`}
@@ -40,7 +40,7 @@ const Records = ({
                 {sortingIcon}
               </button>
             </th>
-            <th className=' p-3 px-5 text-left'>
+            <th className='w-[17%] p-3 px-5 text-left'>
               Last Name{' '}
               {/* <button
                 className={`${sortByName && 'rotate-180'}`}
@@ -49,16 +49,16 @@ const Records = ({
                 {sortingIcon}
               </button> */}
             </th>
-            <th className=' p-3 px-5 text-left'>
+            <th className='w-[17%] p-3 px-5 text-left'>
               Email{' '}
               {/* <button onClick={() => sortTable('email')}>{sortingIcon}</button> */}
             </th>
-            <th className=' p-3 px-5 text-left'>
+            <th className='w-[17%] p-3 px-5 text-left'>
               Phone{' '}
               {/* <button onClick={() => sortTable('phone')}>{sortingIcon}</button> */}
             </th>
-            <th className=' p-3 px-5 text-left'>
-              Created{' '}
+            <th className='w-[17%] p-3 px-5 text-left'>
+              Created At{' '}
               <button
                 className={`${sortedByCreatedAt && 'rotate-180'}`}
                 onClick={() => sortTable('date')}
@@ -66,8 +66,8 @@ const Records = ({
                 {sortingIcon}
               </button>
             </th>
-            <th className=' p-3 px-5 text-left'>Picture</th>
-            <th className=' p-3 px-5 text-left'>Edit</th>
+            <th className='w-[17%] p-3 px-5 text-left'>Picture</th>
+            <th className='w-[17%] p-3 px-5 text-left'>Edit</th>
           </tr>
           {tableData}
         </tbody>

@@ -1,4 +1,4 @@
-import UsersTable from '@/components/UsersDisplay/UsersTable';
+import UsersTable from '@/components/Users/UsersDisplay/UsersTable';
 import React from 'react';
 
 type Props = {};

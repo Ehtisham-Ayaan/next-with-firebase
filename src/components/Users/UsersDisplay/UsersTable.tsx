@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { getAllUsers } from '@/lib/firebase/userHandler';
 import Image from 'next/image';
-import SearchBar from '../ui/SearchBar';
+import SearchBar from '../../ui/SearchBar';
 import Records from './Records';
-import Pagination from './Pagination';
-import UserEditModal from '../ui/UserEditModal';
+import Pagination from '../../ui/Pagination/Pagination';
+import UserEditModal from '../../ui/UserEditModal';
 
 type Props = {};
 
@@ -24,7 +24,7 @@ const UsersTable = (props: Props) => {
   const [sortedByCreatedAt, setSortedByCreatedAt] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(2);
+  const [recordsPerPage] = useState(4);
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;

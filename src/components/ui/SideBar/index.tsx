@@ -11,7 +11,7 @@ const SideBar = (props: Props) => {
   const links = ['/dashboard', '/dashboard/users', '/dashboard/companies'];
 
   const linkMap = links.map((link) => {
-    const activeLink = link === pathname;
+    const activeLink = link === pathname || link === pathname.substring(0, 20);
     return (
       <Link
         key={link}

@@ -1,80 +1,63 @@
 import React, { useState } from 'react';
 import Input from '../Input';
-import ImagePicker from '../ImagePicker';
-import { updateThisUser } from '@/lib/firebase/userHandler';
+import { updateThisCompany } from '@/lib/firebase/CompanyHandler';
 
 type Props = {
-  user: any;
-  editingUser: string;
+  company: any;
+  editingCompany: string;
   fetchData: boolean;
   cancelEditing: (string: string) => void;
   setFetchData: (fetch: boolean) => void;
 };
 
-const UserEditModal = (props: Props) => {
-  const [userUpdateData, setUserUpdateData] = useState({
-    firstName: '',
-    lastName: '',
+const CompanyEditModal = (props: Props) => {
+  const [companyUpdateData, setCompanyUpdateData] = useState({
+    name: '',
     phone: '',
-    dp: null,
+    address: '',
   });
 
-  const fileChangeHandler = (file: any) => {
-    setUserUpdateData((prevData) => ({
-      ...prevData,
-      dp: file,
-    }));
-  };
-
-  const updateCurrentUser = async () => {
+  const updateCurrentCompany = async () => {
     if (
-      userUpdateData.firstName.length == 0 &&
-      userUpdateData.lastName.length == 0 &&
-      userUpdateData.phone.length == 0 &&
-      userUpdateData.dp == null
+      companyUpdateData.name.length == 0 &&
+      companyUpdateData.phone.length == 0 &&
+      companyUpdateData.address.length == 0
     ) {
       alert('No update was found');
       return;
     }
 
-    const updateUserData = {
-      firstName:
-        userUpdateData.firstName.length > 0
-          ? userUpdateData.firstName
-          : props.user.firstName,
-      lastName:
-        userUpdateData.lastName.length > 0
-          ? userUpdateData.lastName
-          : props.user.lastName,
+    const updateCompanyData = {
+      name:
+        companyUpdateData.name.length > 0
+          ? companyUpdateData.name
+          : props.company.firstName,
+      address:
+        companyUpdateData.address.length > 0
+          ? companyUpdateData.address
+          : props.company.address,
       phone:
-        userUpdateData.phone.length > 0
-          ? userUpdateData.phone
-          : props.user.phone,
-      dp: userUpdateData.dp != null ? userUpdateData.dp : props.user.dp,
+        companyUpdateData.phone.length > 0
+          ? companyUpdateData.phone
+          : props.company.phone,
     };
 
-    await updateThisUser(props.editingUser, updateUserData, props.user.email);
+    updateThisCompany(props.editingCompany, updateCompanyData);
     props.cancelEditing('');
-    setUserUpdateData({
-      firstName: '',
-      lastName: '',
-      phone: '',
-      dp: null,
-    });
+    setCompanyUpdateData({ name: '', phone: '', address: '' });
     props.setFetchData(!props.fetchData);
   };
 
-  const cancelUpdatingUser = () => {
-    setUserUpdateData({
-      firstName: '',
-      lastName: '',
+  const cancelUpdatingCompany = () => {
+    setCompanyUpdateData({
+      name: '',
       phone: '',
-      dp: null,
+      address: '',
     });
     props.cancelEditing('');
   };
 
-  const handleUserChange = (event: React.FormEvent) => {
+  const handleCompanyChange = (event: React.FormEvent) => {
     const { name, value } = event.target as HTMLInputElement;
 
     if (name === 'phone') {
@@ -85,7 +68,7 @@ const UserEditModal = (props: Props) => {
         return;
       }
     }
-    setUserUpdateData((prevData) => ({
+    setCompanyUpdateData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -93,13 +76,15 @@ const UserEditModal = (props: Props) => {
 
   return (
     <>
-      {props.editingUser.length > 0 ? (
+      {props.editingCompany.length > 0 ? (
         <>
           <div className='fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black/80 shadow-2xl outline-none focus:outline-none'>
             <div className='relative mx-auto my-6 w-auto max-w-3xl'>
               <div className='relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none'>
                 <div className='flex items-start justify-between rounded-t border-b border-solid border-gray-300 p-5 '>
-                  <h3 className='font=semibold text-3xl'>Update User Info</h3>
+                  <h3 className='font=semibold text-3xl'>
+                    Update Company Info
+                  </h3>
                   <button
                     className='float-right border-0 bg-transparent text-black'
                     onClick={() => props.cancelEditing('')}
@@ -111,47 +96,41 @@ const UserEditModal = (props: Props) => {
                 </div>
                 <div className='relative flex-auto p-6'>
                   <form className='w-full rounded bg-[#F2F2F2] px-8 pb-8 pt-6 shadow-md'>
-                    <div className='flex'>
-                      <ImagePicker
-                        imgUrl={props.user.dp}
-                        onFileChange={fileChangeHandler}
-                      />
-                    </div>
                     <Input
-                      name='firstName'
+                      name='name'
                       type='text'
-                      label='First Name'
-                      placeholder='First Name'
+                      label='Company Name'
+                      placeholder='Company Name'
                       value={
-                        userUpdateData.firstName
-                          ? userUpdateData.firstName
-                          : props.user.firstName
+                        companyUpdateData.name
+                          ? companyUpdateData.name
+                          : props.company.name
                       }
-                      onChange={handleUserChange}
+                      onChange={handleCompanyChange}
                     />
                     <Input
-                      name='lastName'
+                      name='address'
                       type='text'
-                      label='Last Name'
-                      placeholder='Last Name'
+                      label='Company Address'
+                      placeholder='Company Address'
                       value={
-                        userUpdateData.lastName
-                          ? userUpdateData.lastName
-                          : props.user.lastName
+                        companyUpdateData.address
+                          ? companyUpdateData.address
+                          : props.company.address
                       }
-                      onChange={handleUserChange}
+                      onChange={handleCompanyChange}
                     />
                     <Input
                       name='phone'
                       type='text'
-                      label='phone'
+                      label='Company Phone'
                       placeholder='03002131432'
                       value={
-                        userUpdateData.phone
-                          ? userUpdateData.phone
-                          : props.user.phone
+                        companyUpdateData.phone
+                          ? companyUpdateData.phone
+                          : props.company.phone
                       }
-                      onChange={handleUserChange}
+                      onChange={handleCompanyChange}
                     />
                   </form>
                 </div>
@@ -159,14 +138,14 @@ const UserEditModal = (props: Props) => {
                   <button
                     className='background-transparent mb-1 mr-1 px-6 py-2 text-sm font-bold uppercase text-emerald-800 outline-none focus:outline-none'
                     type='button'
-                    onClick={cancelUpdatingUser}
+                    onClick={cancelUpdatingCompany}
                   >
                     Close
                   </button>
                   <button
                     className='mb-1 mr-1 rounded bg-emerald-800 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none hover:shadow-lg focus:outline-none active:bg-emerald-900'
                     type='button'
-                    onClick={() => updateCurrentUser()}
+                    onClick={() => updateCurrentCompany()}
                   >
                     Submit
                   </button>
@@ -180,4 +159,4 @@ const UserEditModal = (props: Props) => {
   );
 };
 
-export default UserEditModal;
+export default CompanyEditModal;

@@ -1,4 +1,4 @@
-import UserAuth from '@/components/UserAuth';
+import UserAuth from '@/components/Users/UserAuth';
 import React from 'react';
 
 type Props = {};

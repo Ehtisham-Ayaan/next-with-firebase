@@ -1,5 +1,11 @@
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { getDocs, collection, doc, updateDoc } from 'firebase/firestore';
+import {
+  getDocs,
+  collection,
+  doc,
+  updateDoc,
+  getCountFromServer,
+} from 'firebase/firestore';
 import { auth, firestore } from '@/lib/firebase/firebase.config';
 
 type UserData = {
@@ -29,7 +35,7 @@ export const addUserToFirebase = (signUpData: UserData) => {
         const storage = getStorage();
         const userImage = ref(
           storage,
-          `users/display_pictures/${signUpData.dp.name}`,
+          `users/display_pictures/${signUpData.email}`,
         );
         url = await uploadBytes(userImage, signUpData.dp).then(
           async (snapshot) => await getDownloadURL(snapshot.ref),
@@ -99,15 +105,16 @@ export const getAllUsers = async () => {
   return usersData;
 };
 
-export const updateThisUser = async (id: string, userData: any) => {
+export const updateThisUser = async (
+  id: string,
+  userData: any,
+  email: string,
+) => {
   const docRef = doc(firestore, 'users', id);
   let url = '';
   if (typeof userData.dp != 'string' && userData.dp?.name) {
     const storage = getStorage();
-    const userImage = ref(
-      storage,
-      `users/display_pictures/${userData.dp.name}`,
-    );
+    const userImage = ref(storage, `users/display_pictures/${email}`);
     url = await uploadBytes(userImage, userData.dp).then(
       async (snapshot) => await getDownloadURL(snapshot.ref),
     );
@@ -127,4 +134,10 @@ export const updateThisUser = async (id: string, userData: any) => {
     .catch((error) => {
       alert(error);
     });
+};
+
+export const totalUsers = async () => {
+  const coll = collection(firestore, 'users');
+  const snapshot = await getCountFromServer(coll);
+  return snapshot.data().count;
 };
