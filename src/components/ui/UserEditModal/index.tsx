@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Input from '../Input';
 import ImagePicker from '../ImagePicker';
 import { updateThisUser } from '@/lib/firebase/userHandler';
@@ -18,6 +18,23 @@ const UserEditModal = (props: Props) => {
     phone: '',
     dp: null,
   });
+
+  const userEditRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handleOutSideClick = (event: any) => {
+      if (!userEditRef.current) return;
+      if (!userEditRef.current?.contains(event.target)) {
+        props.cancelEditing('');
+      }
+    };
+
+    window.addEventListener('mousedown', handleOutSideClick);
+
+    return () => {
+      window.removeEventListener('mousedown', handleOutSideClick);
+    };
+  }, [userEditRef]);
 
   const fileChangeHandler = (file: any) => {
     setUserUpdateData((prevData) => ({
@@ -97,17 +114,12 @@ const UserEditModal = (props: Props) => {
         <>
           <div className='fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black/80 shadow-2xl outline-none focus:outline-none'>
             <div className='relative mx-auto my-6 w-auto max-w-3xl'>
-              <div className='relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none'>
+              <div
+                ref={userEditRef}
+                className='relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none'
+              >
                 <div className='flex items-start justify-between rounded-t border-b border-solid border-gray-300 p-5 '>
                   <h3 className='font=semibold text-3xl'>Update User Info</h3>
-                  <button
-                    className='float-right border-0 bg-transparent text-black'
-                    onClick={() => props.cancelEditing('')}
-                  >
-                    <span className='opacity-7 block h-6 w-6 rounded-full bg-gray-100 py-0 text-xl text-red-500'>
-                      x
-                    </span>
-                  </button>
                 </div>
                 <div className='relative flex-auto p-6'>
                   <form className='w-full rounded bg-[#F2F2F2] px-8 pb-8 pt-6 shadow-md'>
