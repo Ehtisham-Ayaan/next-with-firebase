@@ -8,14 +8,14 @@ type Props = {
   setImgSrc: (string: string) => void;
 };
 
-const ImagePreviewModal = (props: Props) => {
+const ImagePreviewModal = ({ imgSrc, setImgSrc }: Props) => {
   const previewer = useRef<any>(null);
 
   useEffect(() => {
     const handleOutSideClick = (event: any) => {
       if (!previewer.current) return;
       if (!previewer.current?.contains(event.target)) {
-        props.setImgSrc('');
+        setImgSrc('');
       }
     };
 
@@ -27,11 +27,11 @@ const ImagePreviewModal = (props: Props) => {
   }, [previewer]);
 
   const cancelPreview = () => {
-    props.setImgSrc('');
+    setImgSrc('');
   };
   return (
     <>
-      {props.imgSrc.length > 0 && (
+      {imgSrc.length > 0 && (
         <>
           <div className='fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black/80 shadow-2xl outline-none focus:outline-none'>
             <div className='relative mx-auto my-6 w-auto max-w-3xl'>
@@ -41,7 +41,7 @@ const ImagePreviewModal = (props: Props) => {
               >
                 <div className='relative flex-auto p-6'>
                   <Suspense fallback={<LoadingUI />}>
-                    <Previewer imgSrc={props.imgSrc} />
+                    <Previewer imgSrc={imgSrc} />
                   </Suspense>
                 </div>
                 <div className='border-blueGray-200 flex items-center justify-end rounded-b border-t border-solid p-6'>

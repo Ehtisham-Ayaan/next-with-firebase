@@ -7,7 +7,6 @@ import SearchBar from '../../ui/SearchBar';
 import Records from './Records';
 import Pagination from '../../ui/Pagination/Pagination';
 // import CompanyEditModal from '@/components/ui/CompanyEditModal';
-import Link from 'next/link';
 
 type Props = {};
 

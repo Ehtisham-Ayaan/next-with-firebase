@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import EditIcon from '@/images/edit.svg';
 
 type Props = {
   imgUrl?: string;
@@ -38,9 +39,9 @@ const ImagePicker = (props: Props) => {
             height='150'
           />
         </div>
-        <label className='-mt-16 hidden cursor-pointer group-hover:block'>
-          <span className='rounded-full bg-gray-300 px-4 py-2 text-sm leading-normal text-black'>
-            Change
+        <label className='relative top-[-140px] hidden h-full w-full cursor-pointer rounded-full bg-black/30 group-hover:flex'>
+          <span className='flex h-full w-full justify-around px-4 py-2 text-center text-sm leading-normal text-white'>
+            <Image src={EditIcon} alt='change' width='20' height='20' />
           </span>
           <input
             className='focus:shadow-outline hidden w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none'

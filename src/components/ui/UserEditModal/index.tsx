@@ -11,7 +11,13 @@ type Props = {
   setFetchData: (fetch: boolean) => void;
 };
 
-const UserEditModal = (props: Props) => {
+const UserEditModal = ({
+  user,
+  editingUser,
+  fetchData,
+  cancelEditing,
+  setFetchData,
+}: Props) => {
   const [userUpdateData, setUserUpdateData] = useState({
     firstName: '',
     lastName: '',
@@ -25,7 +31,7 @@ const UserEditModal = (props: Props) => {
     const handleOutSideClick = (event: any) => {
       if (!userEditRef.current) return;
       if (!userEditRef.current?.contains(event.target)) {
-        props.cancelEditing('');
+        cancelEditing('');
       }
     };
 
@@ -58,27 +64,25 @@ const UserEditModal = (props: Props) => {
       firstName:
         userUpdateData.firstName.length > 0
           ? userUpdateData.firstName
-          : props.user.firstName,
+          : user.firstName,
       lastName:
         userUpdateData.lastName.length > 0
           ? userUpdateData.lastName
-          : props.user.lastName,
+          : user.lastName,
       phone:
-        userUpdateData.phone.length > 0
-          ? userUpdateData.phone
-          : props.user.phone,
-      dp: userUpdateData.dp != null ? userUpdateData.dp : props.user.dp,
+        userUpdateData.phone.length > 0 ? userUpdateData.phone : user.phone,
+      dp: userUpdateData.dp != null ? userUpdateData.dp : user.dp,
     };
 
-    await updateThisUser(props.editingUser, updateUserData, props.user.email);
-    props.cancelEditing('');
+    await updateThisUser(editingUser, updateUserData, user.email);
+    cancelEditing('');
     setUserUpdateData({
       firstName: '',
       lastName: '',
       phone: '',
       dp: null,
     });
-    props.setFetchData(!props.fetchData);
+    setFetchData(!fetchData);
   };
 
   const cancelUpdatingUser = () => {
@@ -88,7 +92,7 @@ const UserEditModal = (props: Props) => {
       phone: '',
       dp: null,
     });
-    props.cancelEditing('');
+    cancelEditing('');
   };
 
   const handleUserChange = (event: React.FormEvent) => {
@@ -110,7 +114,7 @@ const UserEditModal = (props: Props) => {
 
   return (
     <>
-      {props.editingUser.length > 0 ? (
+      {editingUser.length > 0 ? (
         <>
           <div className='fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black/80 shadow-2xl outline-none focus:outline-none'>
             <div className='relative mx-auto my-6 w-auto max-w-3xl'>
@@ -125,7 +129,7 @@ const UserEditModal = (props: Props) => {
                   <form className='w-full rounded bg-[#F2F2F2] px-8 pb-8 pt-6 shadow-md'>
                     <div className='flex'>
                       <ImagePicker
-                        imgUrl={props.user.dp}
+                        imgUrl={user.dp}
                         onFileChange={fileChangeHandler}
                       />
                     </div>
@@ -137,7 +141,7 @@ const UserEditModal = (props: Props) => {
                       value={
                         userUpdateData.firstName
                           ? userUpdateData.firstName
-                          : props.user.firstName
+                          : user.firstName
                       }
                       onChange={handleUserChange}
                     />
@@ -149,7 +153,7 @@ const UserEditModal = (props: Props) => {
                       value={
                         userUpdateData.lastName
                           ? userUpdateData.lastName
-                          : props.user.lastName
+                          : user.lastName
                       }
                       onChange={handleUserChange}
                     />
@@ -159,9 +163,7 @@ const UserEditModal = (props: Props) => {
                       label='phone'
                       placeholder='03002131432'
                       value={
-                        userUpdateData.phone
-                          ? userUpdateData.phone
-                          : props.user.phone
+                        userUpdateData.phone ? userUpdateData.phone : user.phone
                       }
                       onChange={handleUserChange}
                     />

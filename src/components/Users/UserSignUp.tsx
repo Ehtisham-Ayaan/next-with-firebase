@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import ButtonSecondary from '@/components/ui/ButtonSecondary';
 import Input from '@/components/ui/Input';
 import { addUserToFirebase } from '@/lib/firebase/userHandler';

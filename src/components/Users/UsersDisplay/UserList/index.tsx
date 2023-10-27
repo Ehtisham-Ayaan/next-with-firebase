@@ -77,7 +77,7 @@ const UserList = async ({
           {user.date.substring(0, 24)}
         </span>
       </td>
-      <td className='gap-5 p-3 text-xs xl:px-5'>
+      <td className='gap-5 px-5 text-xs'>
         <Image
           className='hover:cursor-pointer'
           onClick={() => editUser(user)}
