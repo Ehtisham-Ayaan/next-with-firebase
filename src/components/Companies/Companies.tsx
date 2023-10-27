@@ -33,7 +33,7 @@ const Companies = (props: Props) => {
           <h2 className='text-lg font-semibold'>User Companies</h2>
         </div>
         <button
-          className='float-right h-12 rounded-lg bg-emerald-800 px-5 font-semibold text-white'
+          className='float-right h-12 rounded-lg bg-emerald-800 px-5 text-xs font-semibold text-white lg:text-sm'
           onClick={addNewCompany}
         >
           Add New Company

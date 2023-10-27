@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import ImagePreviewModal from '@/components/ui/ImagePreviewModal';
 import LoadingUI from '@/components/ui/LoadingUI';
 
@@ -24,7 +24,7 @@ const Records = ({
 
   return (
     <div className='mb-3 bg-transparent'>
-      <div className='hidden xl:block'>
+      <div className='hidden md:block'>
         <Suspense fallback={<LoadingUI />}>
           <UserList
             filteredUsers={filteredUsers}
@@ -37,7 +37,7 @@ const Records = ({
         </Suspense>
       </div>
 
-      <div className='flex flex-col gap-10 bg-transparent sm:flex xl:hidden'>
+      <div className='flex flex-col gap-10 bg-transparent sm:flex md:hidden'>
         <Suspense fallback={<LoadingUI />}>
           <UserCard
             filteredUsers={filteredUsers}

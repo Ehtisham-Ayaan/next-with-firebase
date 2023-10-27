@@ -51,12 +51,14 @@ const Pagination = ({
         <div className='flex flex-1 justify-between sm:hidden'>
           <Link
             href='#'
+            onClick={goToPrevPage}
             className='relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
           >
             Previous
           </Link>
           <Link
             href='#'
+            onClick={goToNextPage}
             className='relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
           >
             Next
@@ -67,8 +69,12 @@ const Pagination = ({
             <p className='text-sm text-gray-700'>
               Showing{' '}
               <span className='font-medium'>{indexOfFirstRecord + 1}</span> to{' '}
-              <span className='font-medium'>{indexOfLastRecord}</span> of{' '}
-              <span className='font-medium'>{totalRecords}</span> results
+              <span className='font-medium'>
+                {indexOfLastRecord > totalRecords
+                  ? totalRecords
+                  : indexOfLastRecord}
+              </span>{' '}
+              of <span className='font-medium'>{totalRecords}</span> results
             </p>
           </div>
           <div>

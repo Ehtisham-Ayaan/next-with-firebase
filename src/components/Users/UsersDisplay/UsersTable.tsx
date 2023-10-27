@@ -49,7 +49,7 @@ const UsersTable = (props: Props) => {
       ? setFilteredUsers(searchRecords)
       : setFilteredUsers(currentRecords);
 
-    searchResults.length < 5 && searchResults.length > 0 && setCurrentPage(1);
+    currentPage > nPages && nPages != 0 && setCurrentPage(nPages);
   }, [users, currentPage, searchResults]);
 
   useEffect(() => {
@@ -69,7 +69,6 @@ const UsersTable = (props: Props) => {
         user.email.includes(keywords) ||
         user.phone.includes(keywords),
     );
-    // setFilteredUsers(filteredUsers);
     setSearchResults(filteredUsers);
   };
 

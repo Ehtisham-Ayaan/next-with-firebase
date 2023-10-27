@@ -17,7 +17,9 @@ export default function RootLayout({
   return (
     <div>
       <SideBar />
-      <div className='mx-auto mt-10 w-[calc(100vw-490px)]'>{children}</div>
+      <div className='mx-auto mt-10 w-[calc(100vw-100px)] lg:w-[calc(100vw-490px)]'>
+        {children}
+      </div>
     </div>
   );
 }

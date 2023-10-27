@@ -1,13 +1,13 @@
-import React from 'react'
+import React from 'react';
 import Image from 'next/image';
 
 type Props = {
-  filteredUsers: any,
-  setImgSrc: any,
-  editUser: any
-}
+  filteredUsers: any;
+  setImgSrc: any;
+  editUser: any;
+};
 
-const UserCard = async({filteredUsers, setImgSrc, editUser}: Props) => {
+const UserCard = async ({ filteredUsers, setImgSrc, editUser }: Props) => {
   const cardslist = await filteredUsers.map((user: any) => (
     <div
       className='flex min-h-[20rem] w-full flex-col items-center justify-center gap-y-1 rounded-lg bg-gray-100 py-10 shadow'
@@ -27,11 +27,13 @@ const UserCard = async({filteredUsers, setImgSrc, editUser}: Props) => {
           />
         </div>
       )}
-      <div className='font-poppins font-semibold'>{user.firstName}</div>
-      <div>{user.lastName}</div>
-      <div>{user.email}</div>
-      <div>{user.phone}</div>
-      <div>{user.date.substring(0, 24)}</div>
+      <div className='font-poppins text-xs font-semibold sm:text-sm'>
+        {user.firstName}
+      </div>
+      <div className='text-xs sm:text-sm'>{user.lastName}</div>
+      <div className='text-xs sm:text-sm'>{user.email}</div>
+      <div className='text-xs sm:text-sm'>{user.phone}</div>
+      <div className='text-xs sm:text-sm'>{user.date.substring(0, 24)}</div>
       <button
         className='h-12 rounded-lg bg-emerald-800 px-5 font-bold text-white'
         onClick={() => editUser(user)}
@@ -40,9 +42,7 @@ const UserCard = async({filteredUsers, setImgSrc, editUser}: Props) => {
       </button>
     </div>
   ));
-  return (
-    <>{cardslist}</>
-  )
-}
+  return <>{cardslist}</>;
+};
 
-export default UserCard
+export default UserCard;

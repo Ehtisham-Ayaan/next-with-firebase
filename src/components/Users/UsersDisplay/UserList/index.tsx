@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import EditIcon from '@/images/edit.svg';
 import SortingIcon from '@/images/sortingIcon.svg';
 
 type Props = {
@@ -11,7 +12,14 @@ type Props = {
   sortTable: (string: string) => void;
 };
 
-const UserList = async ({ filteredUsers, setImgSrc, editUser, sortByName, sortTable, sortedByCreatedAt }: Props) => {
+const UserList = async ({
+  filteredUsers,
+  setImgSrc,
+  editUser,
+  sortByName,
+  sortTable,
+  sortedByCreatedAt,
+}: Props) => {
   const list = filteredUsers.map((user: any, index: any) => (
     <tr
       key={user.email}
@@ -19,7 +27,7 @@ const UserList = async ({ filteredUsers, setImgSrc, editUser, sortByName, sortTa
         index % 2 === 0 ? 'bg-gray-100' : ''
       }`}
     >
-      <td className='flex items-center p-3 px-5'>
+      <td className='flex w-full items-center p-3'>
         {user.dp && (
           <div
             className='h-12 w-12 rounded-full'
@@ -34,63 +42,98 @@ const UserList = async ({ filteredUsers, setImgSrc, editUser, sortByName, sortTa
             />
           </div>
         )}
-        <div className='ml-2'>{user.firstName}</div>
-      </td>
-      <td className='p-3 px-5'>{user.lastName}</td>
-      <td className='p-3 px-5'>{user.email}</td>
-      <td className='p-3 px-5'>{user.phone}</td>
-      <td className='p-3 px-5'>{user.date.substring(0, 24)}</td>
-      <td className='gap-5 p-3 px-5'>
-        <button
-          className='h-12 rounded-lg bg-emerald-800 px-5 font-bold text-white'
-          onClick={() => editUser(user)}
+        <span
+          title={user.firstName}
+          className='line-clamp-1 text-xs hover:text-clip lg:text-sm xl:px-5'
         >
-          Edit
-        </button>
+          {user.firstName}
+        </span>
+      </td>
+
+      <td className='w-[18%] p-3'>
+        <span
+          title={user.lastName}
+          className='line-clamp-1 text-xs hover:text-clip lg:text-sm xl:px-2'
+        >
+          {user.lastName}
+        </span>
+      </td>
+
+      <td className='w-[18%] p-3'>
+        <span
+          title={user.email}
+          className='line-clamp-1 text-xs hover:text-clip lg:text-sm xl:px-2'
+        >
+          {user.email}
+        </span>
+      </td>
+      <td className='w-[18%] p-3 text-xs lg:text-sm xl:px-2'>{user.phone}</td>
+
+      <td className='w-[18%] p-3'>
+        <span
+          title={user.date.substring(0, 24)}
+          className='line-clamp-1 text-xs hover:text-clip lg:text-sm xl:px-2'
+        >
+          {user.date.substring(0, 24)}
+        </span>
+      </td>
+      <td className='gap-5 p-3 text-xs xl:px-5'>
+        <Image
+          className='hover:cursor-pointer'
+          onClick={() => editUser(user)}
+          src={EditIcon}
+          alt='edit'
+          width='20'
+          height='20'
+        />
       </td>
     </tr>
   ));
 
   return (
-    <table className='text-md mb-4 w-auto rounded bg-white shadow-md '>
+    <table className='text-md mb-4 mt-12 w-auto rounded bg-white shadow-md'>
       <tbody>
-        <tr className='border-b '>
-          <th className='w-[18%] p-3 px-5 text-left'>
+        <tr className='border-b'>
+          <th className='w-[18%] p-3 px-5 text-left text-xs lg:text-sm'>
             First Name{' '}
             <button
               className={`${sortByName && 'rotate-180'}`}
               onClick={() => sortTable('firstName')}
             >
-              <Image src={SortingIcon} alt='sorting icon' />
+              <Image
+                src={SortingIcon}
+                alt='sorting icon'
+                width='18'
+                height='18'
+              />
             </button>
           </th>
-          <th className='w-[17%] p-3 px-5 text-left'>
-            Last Name{' '}
-            {/* <button
-          className={`${sortByName && 'rotate-180'}`}
-          onClick={() => sortTable('firstName')}
-        >
-          {sortingIcon}
-        </button> */}
+          <th className='w-[18%] p-3 text-left text-xs lg:text-sm xl:px-5'>
+            Last Name
           </th>
-          <th className='w-[17%] p-3 px-5 text-left'>
-            Email{' '}
-            {/* <button onClick={() => sortTable('email')}>{sortingIcon}</button> */}
+          <th className='w-[18%] p-3 text-left text-xs lg:text-sm xl:px-5'>
+            Email
           </th>
-          <th className='w-[17%] p-3 px-5 text-left'>
-            Phone{' '}
-            {/* <button onClick={() => sortTable('phone')}>{sortingIcon}</button> */}
+          <th className='w-[18%] p-3 text-left text-xs lg:text-sm xl:px-5'>
+            Phone
           </th>
-          <th className='w-[17%] p-3 px-5 text-left'>
+          <th className='w-[22%] p-3 text-left text-xs lg:text-sm xl:px-5'>
             Created At{' '}
             <button
               className={`${sortedByCreatedAt && 'rotate-180'}`}
               onClick={() => sortTable('date')}
             >
-              <Image src={SortingIcon} alt='sorting icon' />
+              <Image
+                src={SortingIcon}
+                alt='sorting icon'
+                width='18'
+                height='18'
+              />
             </button>
           </th>
-          <th className='w-[17%] p-3 px-5 text-left'>Edit</th>
+          <th className='w-[18%] p-3 px-5 text-left text-xs lg:text-sm'>
+            Edit
+          </th>
         </tr>
 
         {list}

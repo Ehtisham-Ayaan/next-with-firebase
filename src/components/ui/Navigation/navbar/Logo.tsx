@@ -45,13 +45,14 @@ const Logo = () => {
           className='relative'
         />
       </Link>
-      <div
+      <Link
+        href='/'
         style={{
           display: showButton ? 'block' : 'none',
         }}
       >
-        <Button button='Home'/>
-      </div>
+        <Button button='Home' />
+      </Link>
     </>
   );
 };

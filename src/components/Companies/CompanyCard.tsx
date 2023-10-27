@@ -23,7 +23,7 @@ const CompanyCard = (props: Props) => {
           <Image src={CompanyIcon} alt='company' />
         </div>
         <Suspense fallback={<LoadingUI />}>
-          <CompaniesCount companies={companies}/>
+          <CompaniesCount companies={companies} />
         </Suspense>
         <h6 className='block font-poppins'>No. of Companies</h6>
       </div>

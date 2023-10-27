@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
+import LoadingUI from '@/components/ui/LoadingUI';
+
+const CompanyList = lazy(() => import('./CompanyList'));
+const CompanyCard = lazy(() => import('./CompanyCard'));
 
 type Props = {
-  tableData: any;
-  cardData: any;
+  filteredCompanies: any;
+  editCompany: any;
   sortByName: boolean;
   sortedByCreatedAt: boolean;
   sortTable: (type: string) => void;
 };
 
 const Records = ({
-  tableData,
-  cardData,
+  filteredCompanies,
+  editCompany,
   sortByName,
   sortedByCreatedAt,
   sortTable,
@@ -27,39 +31,24 @@ const Records = ({
   );
   return (
     <div className='mb-3 bg-transparent'>
-      <table className='text-md mb-4 hidden w-auto rounded bg-white shadow-md xl:block'>
-        <tbody>
-          <tr className='border-b '>
-            <th className='w-[24%] p-3 px-5 text-left'>
-              Name{' '}
-              <button
-                className={`${sortByName && 'rotate-180'}`}
-                onClick={() => sortTable('name')}
-              >
-                {sortingIcon}
-              </button>
-            </th>
-            <th className=' w-[24%] p-3 px-5 text-left'>
-              Phone{' '}
-              {/* <button onClick={() => sortTable('phone')}>{sortingIcon}</button> */}
-            </th>
-            <th className=' w-[24%] p-3 px-5 text-left'>Address</th>
-            <th className=' w-[24%] p-3 px-5 text-left'>
-              Created At{' '}
-              <button
-                className={`${sortedByCreatedAt && 'rotate-180'}`}
-                onClick={() => sortTable('date')}
-              >
-                {sortingIcon}
-              </button>
-            </th>
-            <th className=' w-[24%] p-3 px-5 text-left'>Edit</th>
-          </tr>
-          {tableData}
-        </tbody>
-      </table>
-      <div className='flex flex-col gap-10 bg-transparent sm:flex xl:hidden'>
-        {cardData}
+      <div className='hidden md:block'>
+        <Suspense fallback={<LoadingUI />}>
+          <CompanyList
+            filteredCompanies={filteredCompanies}
+            editCompany={editCompany}
+            sortByName={sortByName}
+            sortTable={sortTable}
+            sortedByCreatedAt={sortedByCreatedAt}
+          />
+        </Suspense>
+      </div>
+      <div className='flex flex-col gap-10 bg-transparent sm:flex md:hidden'>
+        <Suspense fallback={<LoadingUI />}>
+          <CompanyCard
+            filteredCompanies={filteredCompanies}
+            editCompany={editCompany}
+          />
+        </Suspense>
       </div>
     </div>
   );

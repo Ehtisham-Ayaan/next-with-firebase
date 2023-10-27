@@ -1,5 +1,7 @@
-import Image from 'next/image';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, Suspense, lazy } from 'react';
+import LoadingUI from '../LoadingUI';
+
+const Previewer = lazy(() => import('./Previewer'));
 
 type Props = {
   imgSrc: string;
@@ -38,14 +40,9 @@ const ImagePreviewModal = (props: Props) => {
                 className='relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none'
               >
                 <div className='relative flex-auto p-6'>
-                  <div className='w-full rounded bg-[#F2F2F2] px-8 pb-8 pt-6 shadow-md'>
-                    <Image
-                      src={props.imgSrc}
-                      alt='User Profile Picture'
-                      width='250'
-                      height='250'
-                    />
-                  </div>
+                  <Suspense fallback={<LoadingUI />}>
+                    <Previewer imgSrc={props.imgSrc} />
+                  </Suspense>
                 </div>
                 <div className='border-blueGray-200 flex items-center justify-end rounded-b border-t border-solid p-6'>
                   <button

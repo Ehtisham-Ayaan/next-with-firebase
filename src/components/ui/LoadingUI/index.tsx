@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {};
 
-const Loading = (props: Props) => {
+const LoadingUI = (props: Props) => {
   return (
     <div className='flex w-full justify-evenly'>
       <span
@@ -17,4 +17,4 @@ const Loading = (props: Props) => {
   );
 };
 
-export default Loading;
+export default LoadingUI;
