@@ -9,17 +9,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 
-export const getSignedInUser = async () => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged(
-      (user: any) => {
-        unsubscribe();
-        resolve(user);
-      },
-      reject, // pass up any errors attaching the listener
-    );
-  });
-};
+import { getSignedInUser } from './userHandler';
 
 export const addNewCompany = async (companyData: any) => {
   const user = await getSignedInUser()

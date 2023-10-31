@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { getSignedInUser } from '@/lib/firebase/CompanyHandler';
+import { getSignedInUser } from '@/api/userHandler';
 import React from 'react';
 import CompaniesTable from './CompaniesDisplay/CompaniesTable';
 

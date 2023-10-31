@@ -1,10 +1,22 @@
-import React from 'react';
+'use client';
+
 import Link from 'next/link';
 import Logo from './Logo';
 import Button from '../../Button';
 import LinkMap from '../links';
 
+import { AuthContext } from '@/context/auth_context';
+import { useContext } from 'react';
+import { logOutUser } from '@/api/userHandler';
+import { useRouter } from 'next/navigation';
+
 const Navbar = ({ toggle }: { toggle: () => void }) => {
+  const currentUser = useContext(AuthContext);
+  const router = useRouter();
+  const endSession = () => {
+    logOutUser();
+    router.replace('/auth/signin');
+  };
   return (
     <>
       <div className='sticky top-0 z-50 h-20 w-full bg-emerald-800'>
@@ -32,12 +44,23 @@ const Navbar = ({ toggle }: { toggle: () => void }) => {
               <LinkMap isMobile={false} />
             </ul>
             <div className='flex gap-x-6'>
-              <Link href='/auth/signin'>
-                <Button button={'Sign In'} />
-              </Link>
-              <Link href='/auth/signup'>
-                <Button button={'Sign Up'} />
-              </Link>
+              {currentUser?.currentUser ? (
+                <div title='logout'>
+                  <Button
+                    onClick={endSession}
+                    button={currentUser && currentUser?.currentUser?.email}
+                  />
+                </div>
+              ) : (
+                <>
+                  <Link href='/auth/signin'>
+                    <Button button={'Sign In'} />
+                  </Link>
+                  <Link href='/auth/signup'>
+                    <Button button={'Sign Up'} />
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

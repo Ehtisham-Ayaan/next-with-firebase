@@ -3,11 +3,10 @@
 import React, { FormEvent, useState } from 'react';
 import Input from '../ui/Input';
 import ButtonSecondary from '../ui/ButtonSecondary';
-import {
-  addNewCompany,
-  updateThisCompany,
-} from '@/lib/firebase/CompanyHandler';
+import { addNewCompany, updateThisCompany } from '@/api/CompanyHandler';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {};
 
@@ -28,14 +27,19 @@ const CreateCompany = (props: Props) => {
   });
 
   const handleInputChange = (event: React.FormEvent) => {
-    const { name, value } = event.target as HTMLInputElement;
+    let { name, value } = event.target as HTMLInputElement;
 
     if (name === 'phone') {
-      const pattern = new RegExp(/^[0-9\b]+$/);
-      if (value.length > 0 && !pattern.test(value)) {
-        return;
-      } else if (value.length > 11) {
-        return;
+      value = value.replace(/\D/g, '');
+      var size = value.length;
+      if (size > 0) {
+        value = '(' + value;
+      }
+      if (size > 4) {
+        value = value.slice(0, 5) + ') ' + value.slice(5, 12);
+      }
+      if (size > 7) {
+        value = value.slice(0, 10) + '-' + value.slice(10);
       }
     }
     setCompanyData((prevData) => ({
@@ -46,25 +50,29 @@ const CreateCompany = (props: Props) => {
 
   const createCompanyHandler = (event: FormEvent) => {
     event.preventDefault();
-
+    toast('Adding Your Company');
     if (companyData.name === '' || companyData.name === null) {
       setNameValidationError({
         validate: true,
         value: 'Name is Required',
       });
+      toast.error('Validation Error');
       return;
     }
     addNewCompany(companyData);
+    toast.success('Company Added Successfully');
     setCompanyData({ name: '', phone: '', address: '' });
   };
 
   const updateCompanyHandler = (event: FormEvent) => {
     event.preventDefault();
+    toast('Updating Your Company');
     if (companyData.name === '' || companyData.name === null) {
       setNameValidationError({
         validate: true,
         value: 'Name is Required',
       });
+      toast.error('Validation Error');
       return;
     }
     if (
@@ -84,55 +92,59 @@ const CreateCompany = (props: Props) => {
     };
 
     updateThisCompany(company.id, updateCompanyData);
+    toast.success('Company Updated Successfully');
     router.push('/dashboard/companies');
   };
   return (
-    <form
-      onSubmit={company?.id ? updateCompanyHandler : createCompanyHandler}
-      method='post'
-    >
-      <h1 className='font-poppins text-4xl font-medium'>
-        {company?.id ? 'Update' : 'Create'} Company
-      </h1>
-      <p className='font-BRSonoma-Regular block text-sm opacity-50'>
-        Welcome to Add Company! Please enter your details to continue.
-      </p>
-      <Input
-        name='name'
-        label='Company Name'
-        for='name'
-        type='text'
-        placeholder='Company Name'
-        value={companyData.name}
-        onChange={handleInputChange}
-        validationString={nameValidationError.value}
-        isValidationError={nameValidationError.validate}
-      />
-      <Input
-        name='phone'
-        label='Company Phone Number'
-        for='phone'
-        type='text'
-        placeholder='03004567890'
-        value={companyData.phone}
-        onChange={handleInputChange}
-      />
-      <Input
-        name='address'
-        label='Address'
-        for='address'
-        type='text'
-        placeholder='Address'
-        value={companyData.address}
-        onChange={handleInputChange}
-      />
-
-      <div className='md:flex md:items-center'>
-        <ButtonSecondary
-          button={company?.id ? 'Update Company' : 'Add Company'}
+    <>
+      <form
+        onSubmit={company?.id ? updateCompanyHandler : createCompanyHandler}
+        method='post'
+      >
+        <h1 className='font-poppins text-4xl font-medium'>
+          {company?.id ? 'Update' : 'Create'} Company
+        </h1>
+        <p className='font-BRSonoma-Regular block text-sm opacity-50'>
+          Welcome to Add Company! Please enter your details to continue.
+        </p>
+        <Input
+          name='name'
+          label='Company Name'
+          for='name'
+          type='text'
+          placeholder='Company Name'
+          value={companyData.name}
+          onChange={handleInputChange}
+          validationString={nameValidationError.value}
+          isValidationError={nameValidationError.validate}
         />
-      </div>
-    </form>
+        <Input
+          name='phone'
+          label='Company Phone Number'
+          for='phone'
+          type='text'
+          placeholder='(0300) 456-7890'
+          value={companyData.phone}
+          onChange={handleInputChange}
+        />
+        <Input
+          name='address'
+          label='Address'
+          for='address'
+          type='text'
+          placeholder='Address'
+          value={companyData.address}
+          onChange={handleInputChange}
+        />
+
+        <div className='md:flex md:items-center'>
+          <ButtonSecondary
+            button={company?.id ? 'Update Company' : 'Add Company'}
+          />
+        </div>
+      </form>
+      <ToastContainer position='bottom-right' theme='dark' />
+    </>
   );
 };
 

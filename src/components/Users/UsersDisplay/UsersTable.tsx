@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getAllUsers } from '@/lib/firebase/userHandler';
+import { getAllUsers } from '@/api/userHandler';
 import SearchBar from '../../ui/SearchBar';
 import Records from './Records';
 import Pagination from '../../ui/Pagination/Pagination';

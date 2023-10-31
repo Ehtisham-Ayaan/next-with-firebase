@@ -4,7 +4,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import DashboardCard from '../ui/DashboardCard';
 import LoadingUI from '../ui/LoadingUI';
 import UsersGroup from '@/images/UsersGroup.svg';
-import { totalUsers } from '@/lib/firebase/userHandler';
+import { totalUsers } from '@/api/userHandler';
 import Image from 'next/image';
 const UsersCount = lazy(() => import('./UsersCount'));
 

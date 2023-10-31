@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getUserCompanies } from '@/lib/firebase/CompanyHandler';
+import { getUserCompanies } from '@/api/CompanyHandler';
 
 import SearchBar from '../../ui/SearchBar';
 import Records from './Records';
@@ -14,8 +14,6 @@ const CompaniesTable = (props: Props) => {
   const [companies, setCompanies] = useState<any>([]);
   const [filteredCompanies, setFilteredCompanies] = useState<any>([]);
   const [searchResults, setSearchResults] = useState<any>([]);
-  const [companyList, setCompanyList] = useState(null);
-  const [companyCard, setCompanyCard] = useState(null);
   const [sorted, setSorted] = useState(false);
 
   const [editingCompany, setEditingCompany] = useState('');

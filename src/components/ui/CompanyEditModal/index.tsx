@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Input from '../Input';
-import { updateThisCompany } from '@/lib/firebase/CompanyHandler';
+import { updateThisCompany } from '@/api/CompanyHandler';
 
 type Props = {
   company: any;
@@ -58,14 +58,18 @@ const CompanyEditModal = (props: Props) => {
   };
 
   const handleCompanyChange = (event: React.FormEvent) => {
-    const { name, value } = event.target as HTMLInputElement;
-
+    let { name, value } = event.target as HTMLInputElement;
     if (name === 'phone') {
-      const pattern = new RegExp(/^[0-9\b]+$/);
-      if (value.length > 0 && !pattern.test(value)) {
-        return;
-      } else if (value.length > 11) {
-        return;
+      value = value.replace(/\D/g, '');
+      var size = value.length;
+      if (size > 0) {
+        value = '(' + value;
+      }
+      if (size > 4) {
+        value = value.slice(0, 5) + ') ' + value.slice(5, 12);
+      }
+      if (size > 7) {
+        value = value.slice(0, 10) + '-' + value.slice(10);
       }
     }
     setCompanyUpdateData((prevData) => ({
@@ -124,7 +128,7 @@ const CompanyEditModal = (props: Props) => {
                       name='phone'
                       type='text'
                       label='Company Phone'
-                      placeholder='03002131432'
+                      placeholder='(0300) 213-1432'
                       value={
                         companyUpdateData.phone
                           ? companyUpdateData.phone

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Input from '../Input';
 import ImagePicker from '../ImagePicker';
-import { updateThisUser } from '@/lib/firebase/userHandler';
+import { updateThisUser } from '@/api/userHandler';
 
 type Props = {
   user: any;
@@ -96,14 +96,19 @@ const UserEditModal = ({
   };
 
   const handleUserChange = (event: React.FormEvent) => {
-    const { name, value } = event.target as HTMLInputElement;
+    let { name, value } = event.target as HTMLInputElement;
 
     if (name === 'phone') {
-      const pattern = new RegExp(/^[0-9\b]+$/);
-      if (value.length > 0 && !pattern.test(value)) {
-        return;
-      } else if (value.length > 11) {
-        return;
+      value = value.replace(/\D/g, '');
+      var size = value.length;
+      if (size > 0) {
+        value = '(' + value;
+      }
+      if (size > 4) {
+        value = value.slice(0, 5) + ') ' + value.slice(5, 12);
+      }
+      if (size > 7) {
+        value = value.slice(0, 10) + '-' + value.slice(10);
       }
     }
     setUserUpdateData((prevData) => ({
@@ -161,7 +166,7 @@ const UserEditModal = ({
                       name='phone'
                       type='text'
                       label='phone'
-                      placeholder='03002131432'
+                      placeholder='(0300) 213-1432'
                       value={
                         userUpdateData.phone ? userUpdateData.phone : user.phone
                       }

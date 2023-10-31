@@ -4,7 +4,7 @@ import React, { lazy, Suspense, useState, useEffect } from 'react';
 import DashboardCard from '../ui/DashboardCard';
 import CompanyIcon from '@/images/company.svg';
 import Image from 'next/image';
-import { totalCompanies } from '@/lib/firebase/CompanyHandler';
+import { totalCompanies } from '@/api/CompanyHandler';
 import LoadingUI from '../ui/LoadingUI';
 const CompaniesCount = lazy(() => import('./CompaniesCount'));
 

@@ -1,10 +1,16 @@
 'use client';
 
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, useEffect } from 'react';
 import ButtonSecondary from '@/components/ui/ButtonSecondary';
 import Input from '@/components/ui/Input';
-import { addUserToFirebase } from '@/lib/firebase/userHandler';
+import { addUserToFirebase } from '@/api/userHandler';
 import ImagePicker from '@/components/ui/ImagePicker';
+import { useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { AuthContext } from '@/context/auth_context';
+import { useContext } from 'react';
 
 type Props = {};
 
@@ -35,16 +41,29 @@ const UserSignUp = (props: Props) => {
       value: '',
     });
   const [termsAcceptanceError, setTermsAcceptanceError] = useState(false);
+  const router = useRouter();
+  const currentUser = useContext(AuthContext);
 
-  const handleInputChange = (event: React.FormEvent) => {
-    const { name, value, type, checked } = event.target as HTMLInputElement;
+  useEffect(() => {
+    if (currentUser?.currentUser) {
+      router.push('/dashboard');
+    }
+  }, [currentUser, router]);
+
+  const handleInputChange = (event: FormEvent) => {
+    let { name, value, type, checked } = event.target as HTMLInputElement;
 
     if (name === 'phone') {
-      const pattern = new RegExp(/^[0-9\b]+$/);
-      if (value.length > 0 && !pattern.test(value)) {
-        return;
-      } else if (value.length > 11) {
-        return;
+      value = value.replace(/\D/g, '');
+      var size = value.length;
+      if (size > 0) {
+        value = '(' + value;
+      }
+      if (size > 4) {
+        value = value.slice(0, 5) + ') ' + value.slice(5, 12);
+      }
+      if (size > 7) {
+        value = value.slice(0, 10) + '-' + value.slice(10);
       }
     }
     setUserSignUpData((prevData) => ({
@@ -140,118 +159,129 @@ const UserSignUp = (props: Props) => {
     setPasswordValidationError({ validate: false, value: '' });
     setConfirmPasswordValidationError({ validate: false, value: '' });
     setTermsAcceptanceError(false);
+    toast('Signing you Up!');
 
-    addUserToFirebase(signUpData);
+    addUserToFirebase(signUpData).then((res: any) => {
+      toast.success('Signed Up successfully');
+      setTimeout(() => {
+        if (res?.uid) {
+          router.replace('/dashboard');
+        }
+      }, 1000);
+    });
   };
 
   return (
-    <form onSubmit={signUpHandler} method='post'>
-      <h1 className='font-poppins text-4xl font-medium'>Create Account</h1>
-      <p className='font-BRSonoma-Regular block text-sm opacity-50'>
-        Welcome Back! Please enter your details to continue.
-      </p>
-      <div className='flex'>
-        <ImagePicker onFileChange={fileChangeHandler} />
-      </div>
-      <div className='flex gap-x-2'>
-        <Input
-          name='firstName'
-          label='First Name'
-          for='inline-first-name'
-          type='text'
-          placeholder='First Name'
-          value={signUpData.firstName}
-          onChange={handleInputChange}
-        />
-        <Input
-          name='lastName'
-          label='Last Name'
-          for='inline-last-name'
-          type='text'
-          placeholder='Last Name'
-          value={signUpData.lastName}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className='flex gap-x-2'>
-        <Input
-          name='email'
-          label='Email Address'
-          for='email'
-          type='email'
-          placeholder='Email Address'
-          value={signUpData.email}
-          onChange={handleInputChange}
-          validationString={emailValidationError.value}
-          isValidationError={emailValidationError.validate}
-        />
-        <Input
-          name='phone'
-          label='Phone Number'
-          for='phone'
-          type='text'
-          placeholder='03004567890'
-          value={signUpData.phone}
-          onChange={handleInputChange}
-        />
-      </div>
-      <Input
-        name='address'
-        label='Address'
-        for='address'
-        type='text'
-        placeholder='Address'
-        value={signUpData.address}
-        onChange={handleInputChange}
-      />
-      <div className='flex gap-2'>
-        <Input
-          name='password'
-          label='Password'
-          for='password'
-          type='password'
-          placeholder='Enter Password'
-          value={signUpData.password}
-          onChange={handleInputChange}
-          validationString={passwordValidationError.value}
-          isValidationError={passwordValidationError.validate}
-        />
-        <Input
-          name='confirmPassword'
-          label='Confirm Password'
-          for='confirm-password'
-          type='password'
-          placeholder='Enter Confirm Password'
-          value={signUpData.confirmPassword}
-          onChange={handleInputChange}
-          validationString={confirmPasswordValidationError.value}
-          isValidationError={confirmPasswordValidationError.validate}
-        />
-      </div>
-      <div className='my-2 block'>
-        <label>
-          <input
-            name='termsAcceptance'
-            id='checkbox-1'
-            className="ease-soft rounded-1.4 after:text-xxs after:duration-250 after:ease-soft-in-out duration-250 border-slate-150 relative float-left ml-3 mt-1 h-5 w-5 cursor-pointer appearance-none border border-solid bg-white bg-contain bg-center bg-no-repeat align-top text-base transition-all after:absolute after:flex after:h-full after:w-full after:items-center after:justify-center after:text-white after:opacity-0 after:transition-all after:content-['\2713'] checked:border-0 checked:border-transparent checked:bg-transparent checked:bg-gradient-to-tl checked:from-gray-900 checked:to-slate-800 checked:after:opacity-100 focus:ring-transparent"
-            type='checkbox'
+    <>
+      <form onSubmit={signUpHandler} method='post'>
+        <h1 className='font-poppins text-4xl font-medium'>Create Account</h1>
+        <p className='font-BRSonoma-Regular block text-sm opacity-50'>
+          Welcome Back! Please enter your details to continue.
+        </p>
+        <div className='flex'>
+          <ImagePicker onFileChange={fileChangeHandler} />
+        </div>
+        <div className='flex gap-x-2'>
+          <Input
+            name='firstName'
+            label='First Name'
+            for='inline-first-name'
+            type='text'
+            placeholder='First Name'
+            value={signUpData.firstName}
             onChange={handleInputChange}
           />
-          <label
-            htmlFor='checkbox-1'
-            className={`xs:ml-0 font-BRSonoma-Regular ml-2 cursor-pointer select-none text-xs ${
-              termsAcceptanceError ? 'text-red-700' : 'text-slate-700'
-            }`}
-          >
-            I agree to Terms of Service & Privacy Policy
+          <Input
+            name='lastName'
+            label='Last Name'
+            for='inline-last-name'
+            type='text'
+            placeholder='Last Name'
+            value={signUpData.lastName}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className='flex gap-x-2'>
+          <Input
+            name='email'
+            label='Email Address'
+            for='email'
+            type='email'
+            placeholder='Email Address'
+            value={signUpData.email}
+            onChange={handleInputChange}
+            validationString={emailValidationError.value}
+            isValidationError={emailValidationError.validate}
+          />
+          <Input
+            name='phone'
+            label='Phone Number'
+            for='phone'
+            type='text'
+            placeholder='(0300) 456-7890'
+            value={signUpData.phone}
+            onChange={handleInputChange}
+          />
+        </div>
+        <Input
+          name='address'
+          label='Address'
+          for='address'
+          type='text'
+          placeholder='Address'
+          value={signUpData.address}
+          onChange={handleInputChange}
+        />
+        <div className='flex gap-2'>
+          <Input
+            name='password'
+            label='Password'
+            for='password'
+            type='password'
+            placeholder='Enter Password'
+            value={signUpData.password}
+            onChange={handleInputChange}
+            validationString={passwordValidationError.value}
+            isValidationError={passwordValidationError.validate}
+          />
+          <Input
+            name='confirmPassword'
+            label='Confirm Password'
+            for='confirm-password'
+            type='password'
+            placeholder='Enter Confirm Password'
+            value={signUpData.confirmPassword}
+            onChange={handleInputChange}
+            validationString={confirmPasswordValidationError.value}
+            isValidationError={confirmPasswordValidationError.validate}
+          />
+        </div>
+        <div className='my-2 block'>
+          <label>
+            <input
+              name='termsAcceptance'
+              id='checkbox-1'
+              className="ease-soft rounded-1.4 after:text-xxs after:duration-250 after:ease-soft-in-out duration-250 border-slate-150 relative float-left ml-3 mt-1 h-5 w-5 cursor-pointer appearance-none border border-solid bg-white bg-contain bg-center bg-no-repeat align-top text-base transition-all after:absolute after:flex after:h-full after:w-full after:items-center after:justify-center after:text-white after:opacity-0 after:transition-all after:content-['\2713'] checked:border-0 checked:border-transparent checked:bg-transparent checked:bg-gradient-to-tl checked:from-gray-900 checked:to-slate-800 checked:after:opacity-100 focus:ring-transparent"
+              type='checkbox'
+              onChange={handleInputChange}
+            />
+            <label
+              htmlFor='checkbox-1'
+              className={`xs:ml-0 font-BRSonoma-Regular ml-2 cursor-pointer select-none text-xs ${
+                termsAcceptanceError ? 'text-red-700' : 'text-slate-700'
+              }`}
+            >
+              I agree to Terms of Service & Privacy Policy
+            </label>
           </label>
-        </label>
-      </div>
+        </div>
 
-      <div className='md:flex md:items-center'>
-        <ButtonSecondary button={'Sign Up'} />
-      </div>
-    </form>
+        <div className='md:flex md:items-center'>
+          <ButtonSecondary button={'Sign Up'} />
+        </div>
+      </form>
+      <ToastContainer position='bottom-right' theme='dark' />
+    </>
   );
 };
 

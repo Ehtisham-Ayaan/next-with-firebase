@@ -2,14 +2,20 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { AuthContext } from '@/context/auth_context';
+import { useContext } from 'react';
+
 type Props = {
   isMobile: boolean;
   onToggle?: () => void;
 };
 
 const Links = (props: Props): JSX.Element => {
+  const currentUser = useContext(AuthContext);
   const pathname = usePathname();
-  const links = ['/about', '/services', '/contacts', '/dashboard', ''];
+  const links = ['/about', '/services', '/contacts', ''];
+
+  currentUser?.currentUser && links.push('/dashboard');
 
   const handleToggle = () => {
     if (!props.isMobile) return;

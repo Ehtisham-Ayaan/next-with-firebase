@@ -26,8 +26,8 @@ type SigninData = {
   rememberMe: boolean;
 };
 
-export const addUserToFirebase = (signUpData: UserData) => {
-  auth
+export const addUserToFirebase = async (signUpData: UserData) => {
+  const response = await auth
     .createUserWithEmailAndPassword(signUpData.email, signUpData.password)
     .then(async (cred: any) => {
       let url = '';
@@ -44,7 +44,7 @@ export const addUserToFirebase = (signUpData: UserData) => {
       return { cred, url };
     })
     .then((res: any) => {
-      return firestore.collection('users').doc(res.cred.user.uid).set({
+      const data = firestore.collection('users').doc(res.cred.user.uid).set({
         firstName: signUpData.firstName,
         lastName: signUpData.lastName,
         phone: signUpData.phone,
@@ -54,24 +54,39 @@ export const addUserToFirebase = (signUpData: UserData) => {
         dp: res.url,
         createdAt: new Date(),
       });
+      return { data, res };
     })
-    .then(() => {
-      alert('Signed Up Successfuly');
+    .then((user: any) => {
+      return user.res.cred.user;
     })
     .catch((err: any) => {
-      alert(err);
+      return err;
     });
+  return response;
 };
 
-export const signInUserToFirebase = (signInData: SigninData) => {
-  auth
+export const signInUserToFirebase = async (signInData: SigninData) => {
+  const response = await auth
     .signInWithEmailAndPassword(signInData.email, signInData.password)
     .then((res: any) => {
-      alert('Signed In Successful');
+      return res.user;
     })
     .catch((err: any) => {
-      alert('Email or Password in Incorrect');
+      return err;
     });
+  return response;
+};
+
+export const getSignedInUser = async () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(
+      (user: any) => {
+        unsubscribe();
+        resolve(user);
+      },
+      reject, // pass up any errors attaching the listener
+    );
+  });
 };
 
 export const getAllUsers = async () => {
@@ -140,4 +155,13 @@ export const totalUsers = async () => {
   const coll = collection(firestore, 'users');
   const snapshot = await getCountFromServer(coll);
   return snapshot.data().count;
+};
+
+export const logOutUser = async () => {
+  auth
+    .signOut()
+    .then((res: any) => {})
+    .catch((err: any) => {
+      console.log(err);
+    });
 };

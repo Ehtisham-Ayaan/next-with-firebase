@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Poppins, Roboto } from 'next/font/google';
+import { AuthContextProvider } from '@/context/auth_context';
 import Navigation from '@/components/ui/Navigation';
 import Favicon from './favicon.ico';
 
@@ -37,8 +38,10 @@ export default function RootLayout({
       <body
         className={`${inter.className} ${poppins.variable} ${roboto.variable}`}
       >
-        <Navigation />
-        {children}
+        <AuthContextProvider>
+          <Navigation />
+          {children}
+        </AuthContextProvider>
       </body>
     </html>
   );
